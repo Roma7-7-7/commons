@@ -44,7 +44,8 @@ class TraceHTTPRequestHandler(BaseHTTPRequestHandler):
             print('Body:')
             print(body)
 
-        self.send_response(200, '')
+        self.send_response(200)
+        self.end_headers()
 
     def __parse_params(self):
         return parse_qs(urlparse(self.path).query)
@@ -57,11 +58,15 @@ class TraceHTTPRequestHandler(BaseHTTPRequestHandler):
         return self.rfile.read(int(content_length))
 
 
-if __name__ == '__main__':
+def run():
     print('Starting server')
     try:
-        server = HTTPServer(('', PORT), TraceHTTPRequestHandler)
+        server = HTTPServer(('localhost', PORT), TraceHTTPRequestHandler)
         server.serve_forever()
     except Exception as e:
         print('Error')
         print(e)
+
+
+if __name__ == '__main__':
+    run()
